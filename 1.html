@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Ultra Drop 🗑️</title>
+    <style>
+        /* === БАЗОВЫЕ СТИЛИ === */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0a0a;
+            color: white;
+            min-height: 100vh;
+            touch-action: manipulation;
+            overflow: hidden;
+        }
+
+        /* === ОСНОВНОЙ КОНТЕЙНЕР === */
+        .app {
+            max-width: 420px;
+            width: 100%;
+            height: 100vh;
+            margin: 0 auto;
+            background: linear-gradient(145deg, #0f0f1a, #1a1a2e);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* === ШАПКА === */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 18px;
+            background: rgba(0,0,0,0.4);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            flex-shrink: 0;
+            z-index: 10;
+            position: relative;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-left .logo {
+            font-size: 20px;
+            font-weight: 900;
+            background: linear-gradient(45deg, #f7971e, #ffd200);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header-left .balance {
+            background: rgba(255,255,255,0.06);
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #ffd200;
+        }
+
+        .header-left .balance span {
+            color: white;
+        }
+
+        .menu-toggle {
+            font-size: 28px;
+            cursor: pointer;
+            padding: 4px 8px;
+            background: none;
+            border: none;
+            color: white;
+            touch-action: manipulation;
+            line-height: 1;
+        }
+
+        .menu-toggle:active {
+            opacity: 0.6;
+        }
+
+        /* === ГЛАВНОЕ МЕНЮ === */
+        #mainMenu {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .main-logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .main-logo .icon {
+            font-size: 72px;
+            display: block;
+            filter: drop-shadow(0 0 40px rgba(255,210,0,0.15));
+        }
+
+        .main-logo h1 {
+            font-size: 36px;
+            font-weight: 900;
+            background: linear-gradient(45deg, #f7971e, #ffd200);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-top: 4px;
+            letter-spacing: -1px;
+        }
+
+        .main-logo p {
+            color: #666;
+            font-size: 14px;
+            margin-top: 2px;
+        }
+
+        .case-list {
+            width: 100%;
+            max-width: 340px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding-bottom: 20px;
+        }
+
+        .case-card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 16px;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            cursor: pointer;
+            touch-action: manipulation;
+            transition: transform 0.15s, background 0.15s;
+        }
+
+        .case-card:active {
+            transform: scale(0.97);
+            background: rgba(255,255,255,0.07);
+        }
+
+        .case-card .icon {
+            font-size: 36px;
+            flex-shrink: 0;
+        }
+
+        .case-card .info {
+            flex: 1;
+        }
+
+        .case-card .info .name {
+            font-size: 16px;
+            font-weight: 700;
+            color: #ddd;
+        }
+
+        .case-card .info .desc {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .case-card .price {
+            font-size: 14px;
+            font-weight: 700;
+            color: #ffd200;
+            background: rgba(255,210,0,0.08);
+            padding: 4px 14px;
+            border-radius: 20px;
+            flex-shrink: 0;
+        }
+
+        /* === ЭКРАН КЕЙСА === */
+        #caseScreen {
+            flex: 1;
+            display: none;
+            flex-direction: column;
+            padding: 16px 18px;
+            overflow-y: auto;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: #888;
+            font-size: 16px;
+            padding: 6px 0;
+            cursor: pointer;
+            touch-action: manipulation;
+            text-align: left;
+            margin-bottom: 8px;
+        }
+
+        .back-btn:active {
+            color: white;
+        }
+
+        .case-display {
+            text-align: center;
+            padding: 20px 0 12px 0;
+        }
+
+        .case-display .icon {
+            font-size: 72px;
+            display: block;
+            filter: drop-shadow(0 0 30px rgba(255,210,0,0.12));
+        }
+
+        .case-display .name {
+            font-size: 20px;
+            font-weight: 700;
+            color: #ddd;
+            margin-top: 4px;
+        }
+
+        .case-display .price {
+            font-size: 14px;
+            color: #888;
+        }
+
+        .case-display .price span {
+            color: #ffd200;
+            font-weight: 700;
+        }
+
+        .open-btn {
+            width: 100%;
+            padding: 18px;
+            font-size: 20px;
+            font-weight: 800;
+            border: none;
+            border-radius: 16px;
+            background: linear-gradient(45deg, #f7971e, #ffd200);
+            color: #1a1a2e;
+            cursor: pointer;
+            touch-action: manipulation;
+            transition: transform 0.1s, box-shadow 0.2s;
+            box-shadow: 0 4px 30px rgba(255,210,0,0.15);
+            margin: 12px 0 8px 0;
+        }
+
+        .open-btn:active {
+            transform: scale(0.97);
+        }
+
+        .open-btn:disabled {
+            opacity: 0.5;
+            transform: scale(1);
+            box-shadow: none;
+        }
+
+        .result-area {
+            min-height: 100px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 12px;
+            margin: 8px 0;
+            background: rgba(255,255,255,0.03);
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.04);
+            transition: all 0.3s;
+        }
+
+        .result-area .emoji-big {
+            font-size: 56px;
+            transition: all 0.3s;
+        }
+
+        .result-area .item-name {
+            font-size: 18px;
+            font-weight: 700;
+            margin-top: 4px;
+        }
+
+        .result-area .item-rarity {
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 2px 14px;
+            border-radius: 20px;
+            margin-top: 2px;
+        }
+
+        .result-area .item-price {
+            font-size: 13px;
+            color: #ffd200;
+            margin-top: 4px;
+        }
+
+        .scrolling {
+            display: flex;
+            gap: 10px;
+            overflow: hidden;
+            padding: 8px 0;
+            width: 100%;
+            justify-content: center;
+            min-height: 80px;
+            align-items: center;
+            flex-wrap: nowrap;
+        }
+
+        .scrolling .slot {
+            font-size: 40px;
+            opacity: 0.6;
+            transition: all 0.1s;
+            flex-shrink: 0;
+        }
+
+        .scrolling .slot.active {
+            opacity: 1;
+            transform: scale(1.2);
+        }
+
+        @keyframes scrollPulse {
+            0% { transform: scale(1); opacity: 0.6; }
+            50% { transform: scale(1.15); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.6; }
+        }
+
+        /* === БОКОВОЕ МЕНЮ (ИНВЕНТАРЬ) === */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 85%;
+            max-width: 340px;
+            height: 100%;
+            background: linear-gradient(145deg, #12121f, #1a1a2e);
+            z-index: 100;
+            transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 20px 16px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: -10px 0 40px rgba(0,0,0,0.6);
+            border-left: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .sidebar.open {
+            right: 0;
+        }
+
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 99;
+            display: none;
+            backdrop-filter: blur(4px);
+        }
+
+        .sidebar-overlay.show {
+            display: block;
+        }
+
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            flex-shrink: 0;
+        }
+
+        .sidebar-header h2 {
+            font-size: 20px;
+            color: #ddd;
+        }
+
+        .sidebar-header h2 span {
+            font-size: 14px;
+            color: #666;
+            font-weight: 400;
+        }
+
+        .sidebar-close {
+            background: none;
+            border: none;
+            color: #888;
+            font-size: 28px;
+            cursor: pointer;
+            padding: 0 8px;
+            touch-action: manipulation;
+        }
+
+        .sidebar-close:active {
+            color: white;
+        }
+
+        .sidebar-inventory {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px 0;
+        }
+
+        .sidebar-inventory::-webkit-scrollbar {
+            width: 3px;
+        }
+
+        .sidebar-inventory::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.03);
+            border-radius: 10px;
+        }
+
+        .sidebar-inventory::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+        }
+
+        .inv-item-card {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 12px 14px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 12px;
+            margin-bottom: 8px;
+            border: 1px solid rgba(255,255,255,0.04);
+            transition: background 0.2s;
+        }
+
+        .inv-item-card:active {
+            background: rgba(255,255,255,0.06);
+        }
+
+        .inv-item-card .emoji {
+            font-size: 32px;
+            flex-shrink: 0;
+            width: 44px;
+            text-align: center;
+        }
+
+        .inv-item-card .info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .inv-item-card .info .name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #ddd;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .inv-item-card .info .rarity {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .inv-item-card .info .price {
+            font-size: 12px;
+            color: #ffd200;
+        }
+
+        .sell-btn {
+            background: rgba(255,71,87,0.15);
+            border: 1px solid rgba(255,71,87,0.2);
+            color: #ff4757;
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            touch-action: manipulation;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .sell-btn:active {
+            background: rgba(255,71,87,0.25);
+            transform: scale(0.95);
+        }
+
+        .empty-inv {
+            color: #444;
+            font-size: 16px;
+            text-align: center;
+            padding: 40px 0;
+        }
+
+        .sidebar-total {
+            padding-top: 12px;
+            border-top: 1px solid rgba(255,255,255,0.06);
+            display: flex;
+            justify-content: space-between;
+            color: #666;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .sidebar-total span {
+            color: #ffd200;
+            font-weight: 700;
+        }
+
+        /* === РЕДКОСТЬ ЦВЕТА === */
+        .rarity-blue { color: #4a69bd; }
+        .rarity-purple { color: #a29bfe; }
+        .rarity-pink { color: #fd79a8; }
+        .rarity-red { color: #ff4757; }
+        .rarity-gold { color: #ffd200; }
+
+        .bg-rarity-blue { background: rgba(74,105,189,0.12); border-color: rgba(74,105,189,0.2); }
+        .bg-rarity-purple { background: rgba(162,155,254,0.12); border-color: rgba(162,155,254,0.2); }
+        .bg-rarity-pink { background: rgba(253,121,168,0.12); border-color: rgba(253,121,168,0.2); }
+        .bg-rarity-red { background: rgba(255,71,87,0.12); border-color: rgba(255,71,87,0.2); }
+        .bg-rarity-gold { background: rgba(255,210,0,0.12); border-color: rgba(255,210,0,0.2); }
+
+        /* === ОБЩИЕ === */
+        .hidden { display: none !important; }
+
+        /* === АДАПТИВ === */
+        @media (max-width: 450px) {
+            .main-logo .icon { font-size: 56px; }
+            .main-logo h1 { font-size: 28px; }
+            .case-card { padding: 14px 16px; }
+            .case-card .icon { font-size: 28px; }
+            .open-btn { font-size: 18px; padding: 16px; }
+            .result-area .emoji-big { font-size: 44px; }
+            .sidebar { width: 88%; padding: 16px 14px; }
+            .inv-item-card .emoji { font-size: 26px; }
+        }
+
+        @media (max-width: 380px) {
+            .main-logo .icon { font-size: 44px; }
+            .main-logo h1 { font-size: 24px; }
+            .case-display .icon { font-size: 56px; }
+            .scrolling .slot { font-size: 32px; }
+            .result-area .emoji-big { font-size: 36px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="app">
+    <!-- ШАПКА -->
+    <div class="header">
+        <div class="header-left">
+            <span class="logo">🗑️ ULTRA DROP</span>
+            <span class="balance">💰 <span id="balanceDisplay">1000</span></span>
+        </div>
+        <button class="menu-toggle" id="menuToggle">☰</button>
+    </div>
+
+    <!-- ГЛАВНОЕ МЕНЮ -->
+    <div id="mainMenu">
+        <div class="main-logo">
+            <span class="icon">📦</span>
+            <h1>ULTRA DROP</h1>
+            <p>Открывай кейсы, собирай скины</p>
+        </div>
+        <div class="case-list" id="caseList">
+            <!-- Кейсы будут добавлены через JS -->
+        </div>
+    </div>
+
+    <!-- ЭКРАН КЕЙСА -->
+    <div id="caseScreen">
+        <button class="back-btn" id="backBtn">← Назад</button>
+        <div class="case-display">
+            <span class="icon" id="caseIcon">📦</span>
+            <div class="name" id="caseName">Кейс «Ультра»</div>
+            <div class="price">Цена: <span id="casePrice">299</span> 💰</div>
+        </div>
+        <button class="open-btn" id="openBtn">🔓 ОТКРЫТЬ КЕЙС</button>
+        <div class="result-area" id="resultArea">
+            <div class="scrolling" id="scrollContainer" style="display:none;"></div>
+            <div id="resultContent" style="display:flex;flex-direction:column;align-items:center;">
+                <span class="emoji-big" id="resultEmoji">🎯</span>
+                <span class="item-name" id="resultName">Нажми «Открыть»</span>
+                <span class="item-rarity" id="resultRarity"></span>
+                <span class="item-price" id="resultPrice"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ОВЕРЛЕЙ -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- БОКОВОЕ МЕНЮ (ИНВЕНТАРЬ) -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2>🎒 Инвентарь <span id="invCountSide">(0)</span></h2>
+            <button class="sidebar-close" id="sidebarClose">✕</button>
+        </div>
+        <div class="sidebar-inventory" id="sidebarInventory">
+            <div class="empty-inv">Пока пусто...</div>
+        </div>
+        <div class="sidebar-total">
+            <span>Общая стоимость:</span>
+            <span id="totalValue">0 💰</span>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function() {
+        'use strict';
+
+        // === ПРЕДМЕТЫ ===
+        // Реалистичные скины CS2 с иконками оружий и ценами продажи
+        const WEAPONS = {
+            // Синие (Mil-Spec) — цена продажи 50-100
+            milSpec: [
+                { emoji: '🔫', name: 'AUG | Стиль', price: 55 },
+                { emoji: '🔫', name: 'M4A4 | Зебра', price: 62 },
+                { emoji: '🔫', name: 'AK-47 | Сафари', price: 70 },
+                { emoji: '🔫', name: 'USP-S | Лес', price: 50 },
+                { emoji: '🔫', name: 'Glock-18 | Вода', price: 58 },
+                { emoji: '🔫', name: 'P250 | Металл', price: 45 },
+                { emoji: '🔫', name: 'Five-SeveN | Лес', price: 52 },
+                { emoji: '🔫', name: 'MP7 | Олива', price: 48 },
+                { emoji: '🔫', name: 'UMP-45 | Пустыня', price: 54 },
+                { emoji: '🔫', name: 'MAC-10 | Яркий', price: 60 },
+                { emoji: '🔫', name: 'MP9 | Зелёный', price: 56 },
+                { emoji: '🔫', name: 'SSG 08 | Тень', price: 65 },
+                { emoji: '🔫', name: 'FAMAS | Армия', price: 72 },
+                { emoji: '🔫', name: 'Galil AR | Метро', price: 68 },
+                { emoji: '🔫', name: 'SCAR-20 | Уголь', price: 75 },
+                { emoji: '🔫', name: 'G3SG1 | Лес', price: 78 },
+            ],
+            // Фиолетовые (Restricted) — цена 120-200
+            restricted: [
+                { emoji: '🔫', name: 'M4A1-S | Кровь', price: 150 },
+                { emoji: '🔫', name: 'AK-47 | Синий', price: 175 },
+                { emoji: '🔫', name: 'AWP | Песок', price: 195 },
+                { emoji: '🔫', name: 'USP-S | Огонь', price: 140 },
+                { emoji: '🔫', name: 'Desert Eagle | Ночь', price: 160 },
+                { emoji: '🔫', name: 'P90 | Шторм', price: 130 },
+                { emoji: '🔫', name: 'M4A4 | Дым', price: 145 },
+                { emoji: '🔫', name: 'SSG 08 | Лёд', price: 155 },
+                { emoji: '🔫', name: 'FAMAS | Тигр', price: 138 },
+                { emoji: '🔫', name: 'Galil AR | Огонь', price: 142 },
+                { emoji: '🔫', name: 'MP9 | Молния', price: 125 },
+                { emoji: '🔫', name: 'UMP-45 | Золото', price: 135 },
+            ],
+            // Розовые (Classified) — цена 250-450
+            classified: [
+                { emoji: '🔫', name: 'AK-47 | Красный', price: 380 },
+                { emoji: '🔫', name: 'AWP | Электрик', price: 420 },
+                { emoji: '🔫', name: 'M4A4 | Дракон', price: 350 },
+                { emoji: '🔫', name: 'Desert Eagle | Тигр', price: 310 },
+                { emoji: '🔫', name: 'SSG 08 | Смерч', price: 280 },
+                { emoji: '🔫', name: 'M4A1-S | Ночь', price: 330 },
+                { emoji: '🔫', name: 'AWP | Сафари', price: 390 },
+                { emoji: '🔫', name: 'USP-S | Золото', price: 270 },
+                { emoji: '🔫', name: 'Glock-18 | Искра', price: 290 },
+                { emoji: '🔫', name: 'P250 | Карбон', price: 260 },
+            ],
+            // Красные (Covert) — цена 500-900
+            covert: [
+                { emoji: '🔫', name: 'AK-47 | Огонь', price: 780 },
+                { emoji: '🔫', name: 'AWP | Дракон', price: 850 },
+                { emoji: '🔫', name: 'M4A4 | Пустыня', price: 720 },
+                { emoji: '🔫', name: 'Desert Eagle | Кобра', price: 650 },
+                { emoji: '🔫', name: 'M4A1-S | Икона', price: 700 },
+                { emoji: '🔫', name: 'SSG 08 | Фантом', price: 580 },
+                { emoji: '🔫', name: 'USP-S | Тень', price: 550 },
+                { emoji: '🔫', name: 'AWP | Змея', price: 900 },
+                { emoji: '🔫', name: 'AK-47 | Кровь', price: 820 },
+            ],
+            // Золотые (Gold) — цена 1200-2500
+            gold: [
+                { emoji: '🔪', name: 'Нож | Ультра', price: 2200 },
+                { emoji: '🔪', name: 'Нож | Дракон', price: 1950 },
+                { emoji: '🔪', name: 'Нож | Тень', price: 1800 },
+                { emoji: '🔪', name: 'Нож | Огонь', price: 2400 },
+                { emoji: '🔪', name: 'Перчатки | Спорт', price: 1600 },
+                { emoji: '🔪', name: 'Перчатки | Кровь', price: 1700 },
+                { emoji: '🔪', name: 'Нож | Кристалл', price: 2100 },
+                { emoji: '🔪', name: 'Перчатки | Тень', price: 1500 },
+            ]
+        };
+
+        // КЕЙСЫ
+        const CASES = [
+            { id: 'ultra', icon: '📦', name: 'Кейс «Ультра»', price: 299, description: 'Стандартный набор' },
+            { id: 'premium', icon: '🎁', name: 'Кейс «Премиум»', price: 499, description: 'Шанс на редкие скины' },
+            { id: 'legendary', icon: '💎', name: 'Кейс «Легенда»', price: 799, description: 'Только топ-редкости' },
+        ];
+
+        // Шансы выпадения (для Ultra и Premium)
+        const TIER_WEIGHTS = {
+            milSpec: 8000,
+            restricted: 1300,
+            classified: 500,
+            covert: 200,
+            gold: 0
+        };
+        const TOTAL_WEIGHT = 10000;
+        const GOLD_CHANCE = 26; // 0.26%
+
+        // Для Legendary — повышаем шансы на редкие
+        const LEGENDARY_WEIGHTS = {
+            milSpec: 4000,
+            restricted: 2500,
+            classified: 2000,
+            covert: 1400,
+            gold: 100
+        };
+        const LEGENDARY_TOTAL = 10000;
+
+        // === СОСТОЯНИЕ ===
+        let balance = 1000;
+        let inventory = [];
+        let isOpening = false;
+        let currentCase = null;
+        let currentCaseData = null;
+
+        // === DOM ===
+        const balanceDisplay = document.getElementById('balanceDisplay');
+        const mainMenu = document.getElementById('mainMenu');
+        const caseScreen = document.getElementById('caseScreen');
+        const caseList = document.getElementById('caseList');
+        const backBtn = document.getElementById('backBtn');
+        const caseIcon = document.getElementById('caseIcon');
+        const caseName = document.getElementById('caseName');
+        const casePrice = document.getElementById('casePrice');
+        const openBtn = document.getElementById('openBtn');
+        const resultArea = document.getElementById('resultArea');
+        const resultContent = document.getElementById('resultContent');
+        const resultEmoji = document.getElementById('resultEmoji');
+        const resultName = document.getElementById('resultName');
+        const resultRarity = document.getElementById('resultRarity');
+        const resultPrice = document.getElementById('resultPrice');
+        const scrollContainer = document.getElementById('scrollContainer');
+
+        // Sidebar
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebarClose = document.getElementById('sidebarClose');
+        const sidebarInventory = document.getElementById('sidebarInventory');
+        const invCountSide = document.getElementById('invCountSide');
+        const totalValueSpan = document.getElementById('totalValue');
+
+        // === ОБНОВЛЕНИЕ UI ===
+        function updateUI() {
+            balanceDisplay.textContent = balance;
+            renderCaseList();
+            renderInventorySidebar();
+        }
+
+        // === РЕНДЕР КЕЙСОВ ===
+        function renderCaseList() {
+            caseList.innerHTML = '';
+            CASES.forEach(c => {
+                const card = document.createElement('div');
+                card.className = 'case-card';
+                card.innerHTML = `
+                    <span class="icon">${c.icon}</span>
+                    <div class="info">
+                        <div class="name">${c.name}</div>
+                        <div class="desc">${c.description}</div>
+                    </div>
+                    <div class="price">${c.price} 💰</div>
+                `;
+                card.addEventListener('click', () => openCaseScreen(c));
+                card.addEventListener('touchend', (e) => {
+                    e.preventDefault();
+                    openCaseScreen(c);
+                });
+                caseList.appendChild(card);
+            });
+        }
+
+        // === ОТКРЫТИЕ ЭКРАНА КЕЙСА ===
+        function openCaseScreen(caseData) {
+            currentCase = caseData;
+            currentCaseData = caseData;
+            mainMenu.style.display = 'none';
+            caseScreen.style.display = 'flex';
+            caseIcon.textContent = caseData.icon;
+            caseName.textContent = caseData.name;
+            casePrice.textContent = caseData.price;
+            // Сброс результата
+            resultContent.style.display = 'flex';
+            scrollContainer.style.display = 'none';
+            resultEmoji.textContent = '🎯';
+            resultName.textContent = 'Нажми «Открыть»';
+            resultRarity.textContent = '';
+            resultRarity.className = 'item-rarity';
+            resultPrice.textContent = '';
+            openBtn.disabled = false;
+            openBtn.textContent = '🔓 ОТКРЫТЬ КЕЙС';
+            isOpening = false;
+        }
+
+        // === НАЗАД В МЕНЮ ===
+        function goBack() {
+            caseScreen.style.display = 'none';
+            mainMenu.style.display = 'flex';
+            currentCase = null;
+            currentCaseData = null;
+            if (isOpening) {
+                isOpening = false;
+                openBtn.disabled = false;
+                openBtn.textContent = '🔓 ОТКРЫТЬ КЕЙС';
+            }
+        }
+
+        // === ОПРЕДЕЛЕНИЕ РЕДКОСТИ ===
+        function rollRarity(isLegendary) {
+            const weights = isLegendary ? LEGENDARY_WEIGHTS : TIER_WEIGHTS;
+            const total = isLegendary ? LEGENDARY_TOTAL : TOTAL_WEIGHT;
+
+            // Gold для легендарного кейса — отдельный ролл с повышенным шансом
+            if (isLegendary) {
+                if (Math.random() * 10000 < 1000) { // 10% на золото в легендарном
+                    return 'gold';
+                }
+            } else {
+                if (Math.random() * 10000 < GOLD_CHANCE) {
+                    return 'gold';
+                }
+            }
+
+            const roll = Math.floor(Math.random() * total);
+            let cumulative = 0;
+            for (const [tier, weight] of Object.entries(weights)) {
+                cumulative += weight;
+                if (roll < cumulative) {
+                    return tier;
+                }
+            }
+            return 'milSpec';
+        }
+
+        function getRandomItem(rarity) {
+            const pool = WEAPONS[rarity] || WEAPONS.milSpec;
+            return pool[Math.floor(Math.random() * pool.length)];
+        }
+
+        // === ОТКРЫТИЕ КЕЙСА ===
+        function openCase() {
+            if (isOpening) return;
+            if (!currentCaseData) return;
+
+            const price = currentCaseData.price;
+            if (balance < price) {
+                resultEmoji.textContent = '😢';
+                resultName.textContent = 'Не хватает денег!';
+                resultRarity.textContent = 'Пополни баланс';
+                resultRarity.className = 'item-rarity';
+                resultPrice.textContent = '';
+                resultContent.style.display = 'flex';
+                scrollContainer.style.display = 'none';
+                return;
+            }
+
+            isOpening = true;
+            openBtn.disabled = true;
+            openBtn.textContent = '🔄 ОТКРЫВАЕМ...';
+
+            balance -= price;
+            updateUI();
+
+            const isLegendary = currentCaseData.id === 'legendary';
+            const rarity = rollRarity(isLegendary);
+            const item = getRandomItem(rarity);
+            const result = { ...item, rarity: rarity };
+
+            animateScroll(result);
+            inventory.push(result);
+        }
+
+        // === АНИМАЦИЯ ПРОКРУТКИ ===
+        function animateScroll(finalItem) {
+            const allItems = [
+                ...WEAPONS.milSpec,
+                ...WEAPONS.restricted,
+                ...WEAPONS.classified,
+                ...WEAPONS.covert,
+                ...WEAPONS.gold
+            ];
+
+            const scrollItems = [];
+            for (let i = 0; i < 20; i++) {
+                scrollItems.push(allItems[Math.floor(Math.random() * allItems.length)]);
+            }
+            const insertPos = 15 + Math.floor(Math.random() * 5);
+            scrollItems[insertPos] = finalItem;
+
+            resultContent.style.display = 'none';
+            scrollContainer.style.display = 'flex';
+            scrollContainer.innerHTML = '';
+
+            scrollItems.forEach((item, index) => {
+                const slot = document.createElement('span');
+                slot.className = 'slot';
+                if (index === insertPos) slot.classList.add('active');
+                slot.textContent = item.emoji;
+                scrollContainer.appendChild(slot);
+            });
+
+            let current = 0;
+            const totalSlots = scrollItems.length;
+            const slots = scrollContainer.querySelectorAll('.slot');
+
+            function highlightNext() {
+                slots.forEach(s => s.classList.remove('active'));
+                if (current < totalSlots) {
+                    slots[current].classList.add('active');
+                    slots[current].style.animation = 'scrollPulse 0.15s ease';
+                    setTimeout(() => {
+                        slots[current].style.animation = '';
+                    }, 150);
+                    current++;
+                    const delay = current < 12 ? 80 : current < 17 ? 150 : 300;
+                    setTimeout(highlightNext, delay);
+                } else {
+                    showResult(finalItem);
+                }
+            }
+
+            setTimeout(highlightNext, 200);
+        }
+
+        function showResult(item) {
+            const rarityNames = {
+                milSpec: '🔵 Mil-Spec',
+                restricted: '🟣 Restricted',
+                classified: '🩷 Classified',
+                covert: '❤️ Covert',
+                gold: '💛 GOLD!'
+            };
+
+            scrollContainer.style.display = 'none';
+            resultContent.style.display = 'flex';
+            resultEmoji.textContent = item.emoji;
+            resultName.textContent = item.name;
+            resultRarity.textContent = rarityNames[item.rarity] || '';
+            resultRarity.className = `item-rarity rarity-${item.rarity}`;
+            resultPrice.textContent = `💰 Цена: ${item.price} монет`;
+
+            if (item.rarity === 'gold' || item.rarity === 'covert') {
+                resultArea.style.borderColor = item.rarity === 'gold' ? '#ffd200' : '#ff4757';
+                resultArea.style.background = item.rarity === 'gold' ?
+                    'rgba(255,210,0,0.08)' : 'rgba(255,71,87,0.08)';
+                setTimeout(() => {
+                    resultArea.style.borderColor = 'rgba(255,255,255,0.04)';
+                    resultArea.style.background = 'rgba(255,255,255,0.03)';
+                }, 2000);
+            }
+
+            isOpening = false;
+            openBtn.disabled = false;
+            openBtn.textContent = '🔓 ОТКРЫТЬ КЕЙС';
+            renderInventorySidebar();
+        }
+
+        // === ИНВЕНТАРЬ (БОКОВОЕ МЕНЮ) ===
+        function renderInventorySidebar() {
+            if (inventory.length === 0) {
+                sidebarInventory.innerHTML = '<div class="empty-inv">Пока пусто...</div>';
+                invCountSide.textContent = '(0)';
+                totalValueSpan.textContent = '0 💰';
+                return;
+            }
+
+            let html = '';
+            let totalValue = 0;
+
+            inventory.forEach((item, index) => {
+                totalValue += item.price;
+                const rarityClass = item.rarity === 'gold' ? 'bg-rarity-gold' :
+                                   item.rarity === 'covert' ? 'bg-rarity-red' :
+                                   item.rarity === 'classified' ? 'bg-rarity-pink' :
+                                   item.rarity === 'restricted' ? 'bg-rarity-purple' :
+                                   'bg-rarity-blue';
+                html += `
+                    <div class="inv-item-card ${rarityClass}">
+                        <span class="emoji">${item.emoji}</span>
+                        <div class="info">
+                            <div class="name">${item.name}</div>
+                            <div class="rarity rarity-${item.rarity}">${item.rarity}</div>
+                            <div class="price">${item.price} 💰</div>
+                        </div>
+                        <button class="sell-btn" data-index="${index}">Продать</button>
+                    </div>
+                `;
+            });
+
+            sidebarInventory.innerHTML = html;
+            invCountSide.textContent = `(${inventory.length})`;
+            totalValueSpan.textContent = `${totalValue} 💰`;
+
+            // Продажа предметов
+            document.querySelectorAll('.sell-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const idx = parseInt(this.dataset.index);
+                    sellItem(idx);
+                });
+                btn.addEventListener('touchend', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const idx = parseInt(this.dataset.index);
+                    sellItem(idx);
+                });
+            });
+        }
+
+        function sellItem(index) {
+            if (index < 0 || index >= inventory.length) return;
+            const item = inventory[index];
+            balance += item.price;
+            inventory.splice(index, 1);
+            updateUI();
+            renderInventorySidebar();
+
+            // Всплывающее уведомление на результат
+            resultEmoji.textContent = '💰';
+            resultName.textContent = `Продано за ${item.price} монет`;
+            resultRarity.textContent = '';
+            resultPrice.textContent = '';
+            resultRarity.className = 'item-rarity';
+            resultContent.style.display = 'flex';
+            scrollContainer.style.display = 'none';
+
+            // Если кейс открыт, обновим результат
+            if (caseScreen.style.display === 'flex') {
+                // ничего не делаем
+            }
+        }
+
+        // === БОКОВОЕ МЕНЮ ===
+        function toggleSidebar() {
+            const isOpen = sidebar.classList.contains('open');
+            if (isOpen) {
+                closeSidebar();
+            } else {
+                openSidebar();
+            }
+        }
+
+        function openSidebar() {
+            sidebar.classList.add('open');
+            sidebarOverlay.classList.add('show');
+            renderInventorySidebar();
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeSidebar() {
+            sidebar.classList.remove('open');
+            sidebarOverlay.classList.remove('show');
+            document.body.style.overflow = '';
+        }
+
+        // === СОБЫТИЯ ===
+        menuToggle.addEventListener('click', toggleSidebar);
+        menuToggle.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            toggleSidebar();
+        });
+
+        sidebarClose.addEventListener('click', closeSidebar);
+        sidebarClose.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            closeSidebar();
+        });
+
+        sidebarOverlay.addEventListener('click', closeSidebar);
+        sidebarOverlay.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            closeSidebar();
+        });
+
+        backBtn.addEventListener('click', goBack);
+        backBtn.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            goBack();
+        });
+
+        openBtn.addEventListener('click', openCase);
+        openBtn.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            openCase();
+        });
+
+        // === ИНИЦИАЛИЗАЦИЯ ===
+        updateUI();
+        renderInventorySidebar();
+
+        console.log('🗑️ Ultra Drop v2.0 загружен!');
+        console.log('📦 Кейсы: Ультра, Премиум, Легенда');
+        console.log('🎯 Шансы: Mil-Spec 80%, Restricted 13%, Classified 5%, Covert 2%, Gold 0.26% (Легенда: 10% Gold)');
+
+    })();
+</script>
+</body>
+</html>
